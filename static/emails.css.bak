@@ -1,0 +1,98 @@
+/* Email List Styling */
+.email-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.email-item {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.email-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.email-content {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.security-score {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+
+/* Risk Level Colors */
+.risk-secure {
+    background-color: var(--bs-success);
+}
+
+.risk-cautious {
+    background-color: var(--bs-warning);
+}
+
+.risk-unsafe {
+    background-color: var(--bs-danger);
+}
+
+.risk-dangerous {
+    background-color: var(--bs-dark);
+    border: 2px solid var(--bs-danger);
+}
+
+/* Animation for expanding email */
+.collapse {
+    transition: all 0.3s ease-out;
+}
+
+.collapse.show {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Email action buttons */
+.email-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.email-action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--bs-light);
+    border: none;
+    transition: all 0.2s;
+}
+
+.email-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Security analysis panel */
+.security-info {
+    background-color: rgba(33, 37, 41, 0.6);
+    backdrop-filter: blur(5px);
+}

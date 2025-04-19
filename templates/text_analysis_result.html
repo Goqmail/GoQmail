@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}QMail - Text Analysis Results{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <div class="text-analyzer-container">
+        <div class="card text-analyzer-card">
+            <h2 class="mb-4">Text Analysis Results</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="mb-4">
+                {% if analysis.risk_level|lower == 'secure' %}
+                    {% set level_color = 'success' %}
+                {% elif analysis.risk_level|lower == 'cautious' %}
+                    {% set level_color = 'warning' %}
+                {% elif analysis.risk_level|lower == 'unsafe' %}
+                    {% set level_color = 'danger' %}
+                {% elif analysis.risk_level|lower == 'dangerous' %}
+                    {% set level_color = 'dark' %}
+                {% else %}
+                    {% set level_color = 'secondary' %}
+                {% endif %}
+                
+                <div class="bg-dark p-4 rounded mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="security-score me-3" style="background-color: var(--bs-{{ level_color }})">
+                            {{ analysis.security_score }}
+                        </div>
+                        <div>
+                            <h3 class="mb-0">Security Analysis</h3>
+                            <span class="badge bg-{{ level_color }}">{{ analysis.risk_level }}</span>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-0">{{ analysis.explanation }}</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h4>Original Content</h4>
+                    <div class="p-3 rounded bg-dark">
+                        <div class="mb-2">
+                            {% if analysis.sender %}
+                            <strong>From:</strong> {{ analysis.sender }}
+                            {% endif %}
+                        </div>
+                        <pre class="text-white-50" style="white-space: pre-wrap; word-break: break-word;">{{ analysis.content }}</pre>
+                    </div>
+                </div>
+                
+                {% if analysis.suspicious_patterns and analysis.suspicious_patterns|length > 0 %}
+                <div class="mb-4">
+                    <h4>Detected Issues</h4>
+                    <ul class="list-group">
+                        {% for pattern in analysis.suspicious_patterns %}
+                        <li class="list-group-item bg-dark text-white border-secondary">
+                            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                            {{ pattern }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                {% if analysis.recommendations and analysis.recommendations|length > 0 %}
+                <div class="mb-4">
+                    <h4>Recommendations</h4>
+                    <ul class="list-group">
+                        {% for rec in analysis.recommendations %}
+                        <li class="list-group-item bg-dark text-white border-secondary">
+                            <i class="bi bi-shield-check text-info me-2"></i>
+                            {{ rec }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('text_analyzer_page') }}" class="btn btn-outline-light">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Back to Analyzer
+                </a>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-light">
+                    <i class="bi bi-house-door me-1"></i>
+                    Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

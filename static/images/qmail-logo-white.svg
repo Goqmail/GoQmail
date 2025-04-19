@@ -1,0 +1,10 @@
+<svg width="120" height="30" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .letter { font-family: Arial, sans-serif; font-weight: bold; }
+    .q { fill: #7e57c2; }
+    .mail { fill: #e0e0e0; }
+  </style>
+  <text x="0" y="25" class="letter q" font-size="30">Q</text>
+  <text x="25" y="25" class="letter mail" font-size="24">Mail</text>
+  <path class="q" d="M25,20 L32,27 L29,30 L22,23 Z" />
+</svg>

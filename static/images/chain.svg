@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="400" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.8">
+    <path d="M150 50C161.046 50 170 41.0457 170 30C170 18.9543 161.046 10 150 10C138.954 10 130 18.9543 130 30C130 41.0457 138.954 50 150 50Z" fill="url(#paint0_radial)"/>
+    <path d="M150 150C172.091 150 190 132.091 190 110C190 87.9086 172.091 70 150 70C127.909 70 110 87.9086 110 110C110 132.091 127.909 150 150 150Z" stroke="url(#paint1_linear)" stroke-width="8"/>
+    <path d="M150 250C183.137 250 210 223.137 210 190C210 156.863 183.137 130 150 130C116.863 130 90 156.863 90 190C90 223.137 116.863 250 150 250Z" stroke="url(#paint2_linear)" stroke-width="8"/>
+    <path d="M150 350C194.183 350 230 314.183 230 270C230 225.817 194.183 190 150 190C105.817 190 70 225.817 70 270C70 314.183 105.817 350 150 350Z" stroke="url(#paint3_linear)" stroke-width="8"/>
+  </g>
+  <defs>
+    <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(150 30) rotate(90) scale(20)">
+      <stop stop-color="#A090E4"/>
+      <stop offset="1" stop-color="#672CD3"/>
+    </radialGradient>
+    <linearGradient id="paint1_linear" x1="110" y1="70" x2="190" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#672CD3"/>
+      <stop offset="1" stop-color="#3933A9"/>
+    </linearGradient>
+    <linearGradient id="paint2_linear" x1="90" y1="130" x2="210" y2="250" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#672CD3"/>
+      <stop offset="1" stop-color="#3933A9"/>
+    </linearGradient>
+    <linearGradient id="paint3_linear" x1="70" y1="190" x2="230" y2="350" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#672CD3"/>
+      <stop offset="1" stop-color="#3933A9"/>
+    </linearGradient>
+  </defs>
+</svg>

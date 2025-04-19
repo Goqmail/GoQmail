@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}Ollama Connection Status{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0">Ollama Connection Status</h3>
+                </div>
+                <div class="card-body">
+                    {% if result.status == "connected" %}
+                    <div class="alert alert-success">
+                        <h4><i class="bi bi-check-circle-fill"></i> Connected Successfully!</h4>
+                        <p>Your local Llama model is now accessible for email analysis.</p>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-danger">
+                        <h4><i class="bi bi-exclamation-triangle-fill"></i> Connection Failed</h4>
+                        <p>There was an error connecting to your Ollama instance.</p>
+                    </div>
+                    {% endif %}
+
+                    <h5 class="mt-4">Connection Details:</h5>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th style="width: 30%">Status:</th>
+                                <td>
+                                    {% if result.status == "connected" %}
+                                    <span class="badge bg-success">Connected</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Error</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Endpoint:</th>
+                                <td><code>{{ result.endpoint }}</code></td>
+                            </tr>
+                            <tr>
+                                <th>Model:</th>
+                                <td><code>{{ result.model }}</code></td>
+                            </tr>
+                            {% if result.response %}
+                            <tr>
+                                <th>Test Response:</th>
+                                <td><em>{{ result.response }}</em></td>
+                            </tr>
+                            {% endif %}
+                            {% if result.error %}
+                            <tr>
+                                <th>Error:</th>
+                                <td class="text-danger">{{ result.error }}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+
+                    <h5 class="mt-4">Configuration:</h5>
+                    <p>To use your own Ollama installation:</p>
+                    <ol>
+                        <li>Make sure Ollama is installed and running on your computer</li>
+                        <li>Set the following environment variables:
+                            <ul>
+                                <li><code>OLLAMA_API_URL</code> - Custom API endpoint (default: <code>http://localhost:11434/api/generate</code>)</li>
+                                <li><code>OLLAMA_MODEL</code> - Model name to use (default: <code>llama3</code>)</li>
+                            </ul>
+                        </li>
+                        <li>Make sure your firewall allows connections to the Ollama server</li>
+                    </ol>
+
+                    <div class="mt-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary me-2">Back to Home</a>
+                        <a href="{{ url_for('check_ollama') }}" class="btn btn-primary">Check Connection Again</a>
+                        
+                        {% if result.status == "connected" %}
+                        <a href="{{ url_for('dark_gmail', analysis='ollama') }}" class="btn btn-success ms-2">
+                            Analyze Emails with Llama
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

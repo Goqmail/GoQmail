@@ -1,0 +1,423 @@
+/* Enhanced Results Page Styling */
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes expandDetail {
+    0% {
+        opacity: 0;
+        transform: scaleY(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+/* Enhanced Sidebar */
+.email-sidebar {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    animation: slideInFromLeft 0.6s ease-out forwards;
+}
+
+.email-main {
+    background-color: rgba(13, 23, 58, 0.8);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Shiny Email Compose Button */
+.email-compose-btn {
+    box-shadow: 0 4px 15px rgba(103, 44, 211, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.email-compose-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+}
+
+.email-compose-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(103, 44, 211, 0.5);
+}
+
+.email-compose-btn:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Folder Animation */
+.email-folder {
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.email-folder i {
+    transition: transform 0.3s ease;
+}
+
+.email-folder:hover, .email-folder.active {
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.email-folder:hover i, .email-folder.active i {
+    transform: scale(1.2);
+    color: var(--primary-light);
+}
+
+.email-folder.active {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Divider */
+.mailbox-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+/* Enhanced Category Label */
+.mailbox-label {
+    position: relative;
+    padding-left: 10px;
+}
+
+.mailbox-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 14px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+/* Enhanced Mailbox Category */
+.mailbox-category {
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.mailbox-category:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.color-dot {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.color-dot::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    background: inherit;
+    opacity: 0.3;
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+
+.mailbox-category:hover .color-dot {
+    transform: scale(1.2);
+}
+
+.mailbox-category:hover .color-dot::after {
+    opacity: 0.6;
+    transform: scale(1.5);
+}
+
+.mailbox-category .count {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    padding: 0.1rem 0.4rem;
+}
+
+.mailbox-category:hover .count {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+}
+
+/* Enhanced Email List Header */
+.email-list-header {
+    background: linear-gradient(90deg, rgba(13, 23, 58, 0.9), rgba(22, 37, 88, 0.8));
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.email-list-title {
+    position: relative;
+}
+
+.email-list-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+/* Enhanced Search Box */
+.email-search-box {
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.email-search-box:focus-within {
+    background-color: rgba(13, 23, 58, 0.9);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.email-search-box i {
+    transition: all 0.3s ease;
+}
+
+.email-search-box:focus-within i {
+    color: var(--primary-light);
+}
+
+/* Bento Box Email Layout */
+.email-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.email-item {
+    border-radius: var(--border-radius);
+    background-color: rgba(17, 26, 53, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.email-list .email-item:nth-child(1) { animation-delay: 0.1s; }
+.email-list .email-item:nth-child(2) { animation-delay: 0.2s; }
+.email-list .email-item:nth-child(3) { animation-delay: 0.3s; }
+.email-list .email-item:nth-child(4) { animation-delay: 0.4s; }
+.email-list .email-item:nth-child(5) { animation-delay: 0.5s; }
+
+.email-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-light), var(--primary));
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.email-item:hover {
+    background-color: rgba(22, 37, 88, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.email-item:hover::before {
+    opacity: 1;
+}
+
+/* Enhanced Avatar */
+.email-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    box-shadow: 0 4px 10px rgba(103, 44, 211, 0.3);
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.email-item:hover .email-avatar {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 15px rgba(103, 44, 211, 0.5);
+    border-radius: 50%;
+}
+
+/* Enhanced Subject */
+.email-subject {
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.email-item:hover .email-subject {
+    color: var(--primary-light);
+}
+
+.email-subject::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--primary-light);
+    transition: all 0.3s ease;
+}
+
+.email-item:hover .email-subject::after {
+    width: 100%;
+}
+
+/* Enhanced Email Preview */
+.email-preview {
+    transition: all 0.3s ease;
+}
+
+.email-item:hover .email-preview {
+    color: var(--text-muted);
+}
+
+/* Enhanced Security Badge */
+.security-badge {
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.security-badge::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    z-index: -1;
+    background: inherit;
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.email-item:hover .security-badge::before {
+    opacity: 0.8;
+}
+
+/* Enhanced Email Detail */
+.email-detail {
+    background-color: rgba(17, 26, 53, 0.8);
+    margin: 0.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    animation: expandDetail 0.4s ease-out forwards;
+    transform-origin: top center;
+}
+
+.email-detail h4 {
+    position: relative;
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-light);
+}
+
+.email-detail h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    border-radius: 3px;
+}
+
+.email-detail .card {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.email-detail .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(103, 44, 211, 0.1), transparent 70%);
+    z-index: 0;
+}
+
+.email-detail .card-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Enhanced Email Body */
+.email-body {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.email-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary), transparent);
+}
+
+.email-body-text {
+    line-height: 1.7;
+}

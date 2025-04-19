@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QMail - Modern Inbox</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='modern_emails.css') }}">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <img src="{{ url_for('static', filename='images/qmail-logo-color.svg') }}" alt="QMail" height="24">
+    </div>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('my_emails') }}" class="nav-link">My Emails</a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ url_for('text_analyzer_page') }}" class="nav-link">Text Analyzer</a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">Features</a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">Security</a>
+      </li>
+    </ul>
+    <div class="user-dropdown">
+      <div class="nav-link">
+        {% if current_user.is_authenticated and current_user.username %}
+          {{ current_user.username }}
+        {% elif 'user_name' in session %}
+          {{ session['user_name'] }}
+        {% else %}
+          User
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main app container -->
+  <div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="compose-btn">
+        <i class="bi bi-pencil-fill"></i>
+        <span>Compose</span>
+      </button>
+      
+      <div class="sidebar-nav">
+        <div class="sidebar-item active">
+          <i class="bi bi-inbox"></i>
+          <span>Inbox</span>
+          {% if results.count > 0 %}
+          <span class="badge">{{ results.count }}</span>
+          {% endif %}
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-star"></i>
+          <span>Favorites</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-file-text"></i>
+          <span>Drafts</span>
+          <span class="badge">1</span>
+        </div>
+        <div class="sidebar-item">
+          <i class="bi bi-trash"></i>
+          <span>Trash</span>
+        </div>
+        
+        <div class="mailboxes-header">MAILBOXES</div>
+        
+        <div class="sidebar-item">
+          <span class="mailbox-dot dot-primary"></span>
+          <span>In Primary</span>
+          <span class="badge">{{ results.count }}</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="mailbox-dot dot-social"></span>
+          <span>Social</span>
+          <span class="badge">45</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="mailbox-dot dot-work"></span>
+          <span>Work</span>
+          <span class="badge">103</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="mailbox-dot dot-promo"></span>
+          <span>Promotions</span>
+          <span class="badge">27</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <a href="{{ url_for('text_analyzer_page') }}" class="text-analyzer-btn">
+          <i class="bi bi-shield-check"></i>
+          <span>Text Analyzer</span>
+        </a>
+        <a href="{{ url_for('clear') }}" class="clear-inbox">
+          <i class="bi bi-trash"></i>
+          <span>Clear Inbox</span>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Email List -->
+    <div class="email-list">
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search emails">
+      </div>
+      
+      {% if results.count == 0 %}
+      <div class="empty-state">
+        <i class="bi bi-envelope-open empty-icon"></i>
+        <h3>Your inbox is empty</h3>
+        <p>No emails to display</p>
+        <a href="{{ url_for('index') }}" class="action-btn">Fetch Emails</a>
+      </div>
+      {% else %}
+      
+      {% for email in results.emails %}
+      {% set risk_level = email.security_analysis.risk_level | lower if email.security_analysis else 'cautious' %}
+      
+      <div class="email-item {% if loop.index == 1 %}active{% endif %}" data-email-id="{{ email.id }}">
+        {% if risk_level == 'secure' %}
+        <div class="status-dot" style="background-color: var(--secure-color);"></div>
+        {% elif risk_level == 'cautious' %}
+        <div class="status-dot" style="background-color: var(--cautious-color);"></div>
+        {% elif risk_level == 'unsafe' %}
+        <div class="status-dot" style="background-color: var(--unsafe-color);"></div>
+        {% else %}
+        <div class="status-dot" style="background-color: var(--medium-gray);"></div>
+        {% endif %}
+        
+        <div class="email-avatar {% if 'wordpress' in email.sender|lower %}avatar-w{% else %}avatar-p{% endif %}">
+          {{ email.sender[0]|upper if email.sender else "?" }}
+        </div>
+        
+        <div class="email-content">
+          <div class="email-subject">{{ email.subject or '(No Subject)' }}</div>
+          <div class="email-from">{{ email.sender }}</div>
+          <div class="email-preview">{{ email.body[:60]|replace('\n', ' ') }}</div>
+        </div>
+        
+        <div class="email-time">{{ email.date.split(' ')[0] if ' ' in email.date else email.date }}</div>
+      </div>
+      {% endfor %}
+      
+      {% endif %}
+    </div>
+    
+    <!-- Email Detail -->
+    <div class="email-detail">
+      {% if results.count > 0 %}
+      {% set selected_email = results.emails[0] %}
+      {% set risk_level = selected_email.security_analysis.risk_level | lower if selected_email.security_analysis else 'cautious' %}
+      
+      <div class="email-header">
+        <h1 class="selected-subject">{{ selected_email.subject or '(No Subject)' }}</h1>
+        
+        <div class="sender-info">
+          <div class="sender-avatar">
+            {{ selected_email.sender[0]|upper if selected_email.sender else "?" }}
+          </div>
+          <div class="sender-details">
+            <div class="sender-name">
+              {{ selected_email.sender.split('<')[0] if '<' in selected_email.sender else selected_email.sender }}
+            </div>
+            <div class="sender-email">
+              {{ selected_email.sender.split('<')[1].split('>')[0] if '<' in selected_email.sender else '' }}
+            </div>
+            <div class="email-date">{{ selected_email.date }}</div>
+          </div>
+        </div>
+      </div>
+      
+      {% if selected_email.security_analysis %}
+      <div class="security-analysis">
+        <div class="security-title">
+          <div class="security-badge {% if risk_level == 'unsafe' %}unsafe{% else %}badge-caution{% endif %}">
+            {{ risk_level|title }}
+          </div>
+          <h3>Security Analysis</h3>
+          <div class="security-score">
+            {{ selected_email.security_analysis.security_score }}
+          </div>
+        </div>
+        
+        {% if selected_email.security_analysis.domain %}
+        <div class="domain-info">
+          <div class="domain-label">Domain Specifics:</div>
+          <div class="domain-value">
+            {{ selected_email.security_analysis.domain }} 
+            {{ "is from a well-known financial institution" if selected_email.security_analysis.is_trusted_domain else "contains a disguised domain name" }}
+          </div>
+        </div>
+        {% endif %}
+        
+        {% if selected_email.security_analysis.suspicious_patterns and selected_email.security_analysis.suspicious_patterns|length > 0 %}
+        {% for pattern in selected_email.security_analysis.suspicious_patterns %}
+        <div class="recommendation">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <div>{{ pattern }}</div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        
+        {% if selected_email.security_analysis.recommendations and selected_email.security_analysis.recommendations|length > 0 %}
+        {% for rec in selected_email.security_analysis.recommendations %}
+        <div class="recommendation">
+          <i class="bi bi-shield-check"></i>
+          <div>{{ rec }}</div>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+      {% endif %}
+      
+      <div class="mail-body">
+        {% if selected_email.is_html %}
+        <div class="mail-content">
+          {{ selected_email.body|safe }}
+        </div>
+        {% else %}
+        <div class="mail-content">
+          {{ selected_email.body|render_email(selected_email.sender, selected_email.subject)|safe }}
+        </div>
+        {% endif %}
+      </div>
+      
+      {% else %}
+      <div class="empty-content">
+        <div class="empty-icon">
+          <i class="bi bi-envelope"></i>
+        </div>
+        <h3>Select an email to view</h3>
+        <p>Choose an email from your inbox to view its contents</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Security Criteria Reference -->
+  <div class="score-criteria">
+    <div class="criteria-header">Score-Based Criteria</div>
+    <div class="criteria-row">
+      <div class="criteria-score">8-10</div>
+      <div class="criteria-level">Secure</div>
+      <div class="criteria-description">Everything checks out. Verified sender, clean links, no suspicious signs.</div>
+    </div>
+    <div class="criteria-row">
+      <div class="criteria-score">5-8</div>
+      <div class="criteria-level">Cautious</div>
+      <div class="criteria-description">Some red flags detected — proceed carefully. Medium-risk sender or questionable links/text.</div>
+    </div>
+    <div class="criteria-row">
+      <div class="criteria-score">2-5</div>
+      <div class="criteria-level">Unsafe</div>
+      <div class="criteria-description">High probability of phishing or scam. Multiple signs of suspicious content.</div>
+    </div>
+    <div class="criteria-row">
+      <div class="criteria-score">< 2</div>
+      <div class="criteria-level">Dangerous</div>
+      <div class="criteria-description">Malicious. Known scammer, blacklisted links, fake domains, etc.</div>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set up email list item click handlers
+    const emailItems = document.querySelectorAll('.email-item');
+    emailItems.forEach(item => {
+      item.addEventListener('click', function() {
+        // Remove active class from all items
+        emailItems.forEach(el => el.classList.remove('active'));
+        
+        // Add active class to clicked item
+        this.classList.add('active');
+        
+        const emailId = this.getAttribute('data-email-id');
+        console.log('Selected email ID:', emailId);
+        
+        // In a full implementation, we would fetch the email content 
+        // and update the detail view
+      });
+    });
+  });
+  </script>
+</body>
+</html>

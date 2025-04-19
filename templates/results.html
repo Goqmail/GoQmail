@@ -1,0 +1,279 @@
+{% extends "layout.html" %}
+
+{% block title %}QMail - Your Inbox{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show mt-4" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="row g-0 overflow-hidden mt-4">
+        <!-- Email Sidebar -->
+        <div class="col-md-3 email-sidebar">
+            <!-- Compose Button -->
+            <a href="#" class="email-compose-btn d-flex align-items-center justify-content-center">
+                <i class="bi bi-pencil-fill me-2"></i> Compose
+            </a>
+            
+            <!-- Email Folders -->
+            <div class="email-folder active">
+                <i class="bi bi-inbox"></i> Inbox
+                {% if results.count %}
+                <span class="badge rounded-pill">{{ results.count }}</span>
+                {% endif %}
+            </div>
+            <div class="email-folder">
+                <i class="bi bi-star"></i> Favorites
+            </div>
+            <div class="email-folder">
+                <i class="bi bi-file-earmark-text"></i> Drafts
+                <span class="badge rounded-pill">1</span>
+            </div>
+            <div class="email-folder">
+                <i class="bi bi-trash"></i> Trash
+            </div>
+            
+            <hr class="mailbox-divider">
+            
+            <!-- Email Categories -->
+            <div class="mailbox-label">MAILBOXES</div>
+            <div class="mailbox-category">
+                <span class="color-dot" style="background-color: #4f46e5;"></span>
+                Personal
+                <span class="count">328</span>
+            </div>
+            <div class="mailbox-category">
+                <span class="color-dot" style="background-color: #0ea5e9;"></span>
+                Social
+                <span class="count">45</span>
+            </div>
+            <div class="mailbox-category">
+                <span class="color-dot" style="background-color: #10b981;"></span>
+                Work
+                <span class="count">204</span>
+            </div>
+            <div class="mailbox-category">
+                <span class="color-dot" style="background-color: #f59e0b;"></span>
+                Promotions
+                <span class="count">713</span>
+            </div>
+            
+            <hr class="mailbox-divider">
+            
+            <!-- AI Analysis Mode Toggle -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="mailbox-label mb-0">AI ANALYSIS</div>
+                <a href="{{ url_for('toggle_ai') }}" class="btn btn-sm {% if results.full_content %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    <i class="bi bi-toggle-{% if results.full_content %}on{% else %}off{% endif %} me-1"></i>
+                    {% if results.full_content %}ON{% else %}OFF{% endif %}
+                </a>
+            </div>
+            <div class="text-muted small">
+                {% if results.using_ai and results.full_content %}
+                Full AI Analysis
+                {% elif results.using_ai %}
+                Header-Only AI Analysis
+                {% else %}
+                Basic Analysis
+                {% endif %}
+            </div>
+            
+            <div class="mt-4 text-center">
+                <a href="{{ url_for('clear') }}" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash me-1"></i> Clear Data
+                </a>
+            </div>
+        </div>
+        
+        <!-- Email Main Content -->
+        <div class="col-md-9 email-main">
+            <!-- Email Header -->
+            <div class="email-list-header">
+                <div class="email-list-title">
+                    <div class="d-flex align-items-center">
+                        <span>Inbox</span>
+                        {% if results.using_ai and results.full_content %}
+                        <span class="badge bg-primary ms-2">Full AI Analysis</span>
+                        {% elif results.using_ai %}
+                        <span class="badge bg-info ms-2">Header-Only AI Analysis</span>
+                        {% else %}
+                        <span class="badge bg-secondary ms-2">Basic Analysis</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-light">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Email Search -->
+            <div class="email-search-box">
+                <i class="bi bi-search me-2"></i>
+                <input type="text" placeholder="Search emails">
+            </div>
+            
+            {% if results.count == 0 %}
+            <div class="text-center py-5">
+                <i class="bi bi-inbox" style="font-size: 3rem; opacity: 0.3;"></i>
+                <h3 class="mt-3">Your inbox is empty</h3>
+                <p class="text-muted">No emails were found or there was an error connecting to the email server.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary mt-2">Fetch Emails</a>
+            </div>
+            {% else %}
+            <!-- Email List -->
+            <div class="email-list">
+                {% for email in results.emails %}
+                <div class="email-item d-flex" data-bs-toggle="collapse" data-bs-target="#emailContent{{ loop.index }}" aria-expanded="false">
+                    <div class="email-avatar">
+                        {% if email.sender %}{{ email.sender[0]|upper }}{% else %}?{% endif %}
+                    </div>
+                    <div class="email-header">
+                        <div class="d-flex justify-content-between">
+                            <div class="email-subject">{{ email.subject or '(No Subject)' }}</div>
+                            <div>{{ email.date }}</div>
+                        </div>
+                        <div class="email-meta">
+                            From: {{ email.sender }}
+                            
+                            {% if email.security_analysis %}
+                                {% set risk_level = email.security_analysis.risk_level | lower %}
+                                {% if risk_level == 'secure' %}
+                                    {% set badge_color = 'success' %}
+                                {% elif risk_level == 'cautious' %}
+                                    {% set badge_color = 'warning' %}
+                                {% elif risk_level == 'unsafe' %}
+                                    {% set badge_color = 'danger' %}
+                                {% elif risk_level == 'dangerous' %}
+                                    {% set badge_color = 'dark text-danger' %}
+                                {% else %}
+                                    {% set badge_color = 'secondary' %}
+                                    {% set risk_level = 'cautious' %}
+                                {% endif %}
+                            
+                                <span class="badge bg-{{ badge_color }} security-badge">
+                                    {{ email.security_analysis.risk_level if email.security_analysis.risk_level else 'Cautious' }}
+                                </span>
+                            
+                                {% if email.security_analysis.suspicious_patterns|length > 0 %}
+                                <span class="badge bg-danger security-badge">{{ email.security_analysis.suspicious_patterns|length }} Warning(s)</span>
+                                {% endif %}
+                            
+                                {% if not email.security_analysis.is_trusted_domain %}
+                                <span class="badge bg-warning security-badge">Untrusted Domain</span>
+                                {% else %}
+                                <span class="badge bg-info security-badge">Trusted Domain</span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="email-preview">
+                            {{ email.body|truncate(100) if email.body else 'No content' }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Email Content Collapse -->
+                <div class="collapse" id="emailContent{{ loop.index }}">
+                    <div class="email-detail card card-body">
+                        <h4>{{ email.subject or '(No Subject)' }}</h4>
+                        <div class="email-meta mb-4">
+                            <strong>From:</strong> {{ email.sender }}<br>
+                            <strong>Date:</strong> {{ email.date }}
+                        </div>
+                        
+                        {% if email.security_analysis %}
+                        <div class="mb-4">
+                            <h5>Security Analysis</h5>
+                            <div class="card bg-dark">
+                                <div class="card-body pb-0">
+                                    <p><strong>Risk Level:</strong> <span class="badge bg-{{ badge_color }}">{{ email.security_analysis.risk_level }}</span></p>
+                                    <p><strong>Security Score:</strong> <span class="badge bg-dark">{% if email.security_analysis.security_score %}{{ email.security_analysis.security_score }}{% else %}5{% endif %}/10</span></p>
+                                    <p><strong>Domain:</strong> {{ email.security_analysis.domain }} ({{ 'Trusted' if email.security_analysis.is_trusted_domain else 'Not Trusted' }})</p>
+                                    
+                                    {% if email.security_analysis.suspicious_patterns %}
+                                    <div class="mb-3">
+                                        <strong>Suspicious Patterns:</strong>
+                                        <ul class="list-group list-group-flush mt-2">
+                                            {% for pattern in email.security_analysis.suspicious_patterns %}
+                                            <li class="list-group-item bg-transparent text-white-50 border-secondary">{{ pattern }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if email.security_analysis.summary %}
+                                    <p><strong>Summary:</strong> {{ email.security_analysis.summary }}</p>
+                                    {% endif %}
+                                    
+                                    {% if email.security_analysis.rationale %}
+                                    <div class="mb-3">
+                                        <strong>Analysis Rationale:</strong>
+                                        <p class="mt-2 text-white-50">{{ email.security_analysis.rationale }}</p>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if email.security_analysis.recommendations %}
+                                    <div class="mb-3">
+                                        <strong>Recommendations:</strong>
+                                        <ul class="list-group list-group-flush mt-2">
+                                            {% if email.security_analysis.recommendations is string %}
+                                                <li class="list-group-item bg-transparent text-white-50 border-secondary">{{ email.security_analysis.recommendations }}</li>
+                                            {% else %}
+                                                {% for rec in email.security_analysis.recommendations %}
+                                                <li class="list-group-item bg-transparent text-white-50 border-secondary">{{ rec }}</li>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="email-body">
+                            <pre class="email-body-text">{{ email.body }}</pre>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add a Text Analyzer button to the sidebar
+    const sidebarEl = document.querySelector('.email-sidebar');
+    if (sidebarEl) {
+        const divider = document.createElement('hr');
+        divider.className = 'mailbox-divider';
+        
+        const analyzerLink = document.createElement('a');
+        analyzerLink.href = "{{ url_for('text_analyzer_page') }}";
+        analyzerLink.className = "email-compose-btn mt-4 d-flex align-items-center justify-content-center bg-info";
+        analyzerLink.innerHTML = '<i class="bi bi-braces-asterisk me-2"></i> Text Analyzer';
+        
+        // Insert the divider and link before the Clear Data button
+        const clearDataBtnContainer = document.querySelector('.email-sidebar .mt-4.text-center');
+        if (clearDataBtnContainer) {
+            sidebarEl.insertBefore(divider, clearDataBtnContainer);
+            sidebarEl.insertBefore(analyzerLink, clearDataBtnContainer);
+        }
+    }
+});
+</script>
+{% endblock %}

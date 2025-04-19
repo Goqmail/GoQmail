@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <base target="_blank">
+    <style>
+        body { 
+            margin: 16px; 
+            font-family: 'Arial', sans-serif; 
+            font-size: 14px; 
+            line-height: 1.5;
+            color: #202124;
+        }
+        blockquote { 
+            margin-left: 10px; 
+            padding-left: 10px; 
+            border-left: 2px solid #ddd; 
+            color: #555; 
+        }
+        img { max-width: 100%; height: auto; }
+        table { max-width: 100%; }
+        a { color: #1a73e8; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        p { margin: 0 0 10px 0; }
+    </style>
+</head>
+<body>
+    {% if is_html %}
+        {{ email_content|safe }}
+    {% else %}
+        <div class="formatted-email">
+            {% for paragraph in email_content.split('\n\n') %}
+                {% if paragraph.strip() %}
+                    {% if paragraph.strip() matches '^[-=_]{3,}$' %}
+                        <hr class="email-separator">
+                    {% else %}
+                        <p>
+                            {% for line in paragraph.split('\n') %}
+                                {{ line|urlize }}<br>
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</body>
+</html>

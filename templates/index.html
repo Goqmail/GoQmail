@@ -1,0 +1,238 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="spline-background">
+        <!-- Spline scene will be loaded dynamically via JavaScript -->
+    </div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-10 hero-content">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h1 class="text-4xl hero-title">
+                            Your <span id="animated-word" class="gradient-text animated-word">Gmail</span> deserves privacy
+                        </h1>
+                        <p class="hero-subtitle">QMail combines cutting-edge AI agents with quantum encryption techniques to deliver the most secure, intelligent email experience ever created.</p>
+                        <div class="d-flex flex-wrap gap-3 hero-buttons mt-5">
+                            <a href="{{ url_for('google_auth.google_login') }}" class="btn btn-primary">Get Started for Free</a>
+                            <a href="#features" class="btn btn-outline-light">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5" id="features">
+    <div class="container">
+        <h2 class="text-center mb-2">Intelligent Email Security</h2>
+        <p class="text-center text-muted mb-5">Our multi-agent AI system protects your inbox while making email management effortless.</p>
+        
+        <div class="row g-4">
+            <!-- Guardian Feature -->
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="icon-container" style="background: rgba(8, 38, 136, 0.2);">
+                        <img src="{{ url_for('static', filename='images/guardian-icon.svg') }}" alt="Guardian" width="40">
+                    </div>
+                    <h3>Guardian</h3>
+                    <p>Advanced phishing detection and security threat analysis, identifying scams before they reach you.</p>
+                    <div class="mt-auto pt-2">
+                        <small class="text-muted">Powered by GPT-4o mini</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Organizer Feature -->
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="icon-container" style="background: rgba(8, 38, 136, 0.2);">
+                        <img src="{{ url_for('static', filename='images/organizer-icon.svg') }}" alt="Organizer" width="40">
+                    </div>
+                    <h3>Organizer</h3>
+                    <p>Intelligent categorization that automatically sorts emails by priority, type, and relationship.</p>
+                    <div class="mt-auto pt-2">
+                        <small class="text-muted">Powered by LangChain</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Responder Feature -->
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="icon-container" style="background: rgba(8, 38, 136, 0.2);">
+                        <img src="{{ url_for('static', filename='images/responder-icon.svg') }}" alt="Responder" width="40">
+                    </div>
+                    <h3>Responder</h3>
+                    <p>Creates intelligent email responses and unsubscribe templates, saving you time and effort.</p>
+                    <div class="mt-auto pt-2">
+                        <small class="text-muted">Powered by GPT-4o mini</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sentinel Feature -->
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="icon-container" style="background: rgba(8, 38, 136, 0.2);">
+                        <img src="{{ url_for('static', filename='images/sentinel-icon.svg') }}" alt="Sentinel" width="40">
+                    </div>
+                    <h3>Sentinel</h3>
+                    <p>Continuously monitors your privacy and ensures quantum encryption protocols are properly applied.</p>
+                    <div class="mt-auto pt-2">
+                        <small class="text-muted">Powered by LangChain</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quantum Security Section -->
+<section class="quantum-security" id="security">
+    <div class="container">
+        <h2 class="gradient-text">Quantum-Grade Security</h2>
+        <p>Our advanced encryption makes your communications virtually impossible to intercept or decode.</p>
+        
+        <div class="row mt-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="{{ url_for('static', filename='images/quantum-encryption.svg') }}" alt="Quantum Encryption Visualization" class="img-fluid rounded quantum-image">
+            </div>
+            <div class="col-lg-6">
+                <!-- Step 1 -->
+                <div class="encryption-step d-flex mb-4">
+                    <div class="encryption-step-number">1</div>
+                    <div>
+                        <h3 class="encryption-step-title">Quantum Key Distribution</h3>
+                        <p class="encryption-step-description">Uses quantum properties to establish secure encryption keys that change with each session.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="encryption-step d-flex mb-4">
+                    <div class="encryption-step-number">2</div>
+                    <div>
+                        <h3 class="encryption-step-title">Tamper Detection</h3>
+                        <p class="encryption-step-description">Any attempt to intercept communication automatically corrupts the message, alerting both sender and recipient.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="encryption-step d-flex mb-4">
+                    <div class="encryption-step-number">3</div>
+                    <div>
+                        <h3 class="encryption-step-title">Post-Quantum Cryptography</h3>
+                        <p class="encryption-step-description">Our algorithms are designed to resist attacks from both classical and quantum computers.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="encryption-step d-flex">
+                    <div class="encryption-step-number">4</div>
+                    <div>
+                        <h3 class="encryption-step-title">Zero-Knowledge Proofs</h3>
+                        <p class="encryption-step-description">Authenticate without revealing sensitive information, even to our own systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison Section -->
+<section class="py-5" id="comparison">
+    <div class="container">
+        <h2 class="text-center mb-2">Why Choose QMail?</h2>
+        <p class="text-center text-muted mb-5">See how QMail compares to other leading email providers:</p>
+        
+        <div class="table-responsive">
+            <table class="comparison-table table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>QMail</th>
+                        <th>ProtonMail</th>
+                        <th>Gmail</th>
+                        <th>Outlook</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AI-Powered Security</td>
+                        <td><i class="bi bi-check-lg check"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                        <td><i class="bi bi-check-lg check"></i> <small>Basic</small></td>
+                        <td><i class="bi bi-check-lg check"></i> <small>Basic</small></td>
+                    </tr>
+                    <tr>
+                        <td>Quantum Encryption</td>
+                        <td><i class="bi bi-check-lg check"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Full Privacy</td>
+                        <td><i class="bi bi-check-lg check"></i></td>
+                        <td><i class="bi bi-check-lg check"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Auto-Categorization</td>
+                        <td><i class="bi bi-check-lg check"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                        <td><i class="bi bi-check-lg check"></i> <small>Basic</small></td>
+                        <td><i class="bi bi-check-lg check"></i> <small>Basic</small></td>
+                    </tr>
+                    <tr>
+                        <td>Smart Response</td>
+                        <td><i class="bi bi-check-lg check"></i></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                        <td><i class="bi bi-check-lg check"></i> <small>Limited</small></td>
+                        <td><i class="bi bi-x-lg cross"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h2 class="mb-4">Ready to experience the future of email?</h2>
+                <p class="mb-4">Join thousands of users who have already enhanced their email security and productivity.</p>
+                <a href="{{ url_for('google_auth.google_login') }}" class="btn btn-primary btn-lg">Get Started for Free</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth scrolling to all links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

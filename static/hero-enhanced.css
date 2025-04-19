@@ -1,0 +1,90 @@
+/* Enhanced Hero Section Styling */
+
+/* No Scroll on Spline Background */
+.spline-background {
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Collapse Animation for Hero Section */
+.hero-section {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.hero-section.minimized {
+    min-height: 250px;
+    padding: 5rem 0 2rem;
+}
+
+.hero-section.collapsed {
+    min-height: 80px;
+    padding: 2rem 0 1rem;
+    overflow: hidden;
+}
+
+.hero-content {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-section.minimized .hero-content {
+    transform: scale(0.85);
+    opacity: 0.85;
+}
+
+.hero-section.collapsed .hero-content {
+    transform: scale(0.6) translateY(-20px);
+    opacity: 0.3;
+}
+
+/* Left-aligned Hero Content for Large Displays */
+@media (min-width: 992px) {
+    .hero-content {
+        text-align: left;
+        margin-left: 0;
+    }
+
+    .hero-title {
+        max-width: 50%;
+    }
+
+    .hero-subtitle {
+        margin-left: 0;
+        max-width: 550px;
+    }
+
+    .hero-buttons {
+        justify-content: flex-start;
+    }
+
+    /* Spline positioning for right side */
+    .spline-right-container {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    /* Hide the bottom right badge */
+    .spline-badge-container {
+        display: none;
+    }
+}
+
+/* Fade Content on Scroll */
+.hero-section .container {
+    transition: opacity 0.3s ease;
+}
+
+.hero-section.fade-content .container {
+    opacity: 0.1;
+}
+
+/* Enable pointer events only on container */
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
